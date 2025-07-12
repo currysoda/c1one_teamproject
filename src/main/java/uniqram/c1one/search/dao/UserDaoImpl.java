@@ -20,7 +20,7 @@ public class UserDaoImpl implements UserDao {
 	public List<UserSearchResultDto> findUserByName(String username) {
 		
 		// 유저명을 정확히 검색해야함 LIKE 처리하지 않음
-		String sql = "SELECT id, username FROM `user` WHERE username = :username";
+		String sql = "SELECT id, username FROM `users` WHERE username = :username";
 		
 		Query nativeQuery = em.createNativeQuery(sql);
 		nativeQuery.setParameter("username", username);

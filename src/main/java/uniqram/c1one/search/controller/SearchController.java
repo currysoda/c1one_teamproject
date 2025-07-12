@@ -1,5 +1,7 @@
 package uniqram.c1one.search.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import uniqram.c1one.search.service.SearchHistoryRecord;
 @RestController
 @RequestMapping("/api/search")
 @RequiredArgsConstructor
+@Tag(name ="Search API", description = "검색 기능을 제공하는 api 입니다.")
 public class SearchController {
 	
 	private final FindUser            findUser;
@@ -25,6 +28,10 @@ public class SearchController {
 	
 	// 유저가 무엇을 어떻게 검색했느냐에 따라 다르게 매핑
 	// keyword string formatting 에 따라 (일단 username 만 구현함 추후 수정)
+	@Operation(
+		summary = "검색어로 검색하는 api 입니다.",
+		description = "검색어로 검색하는 api 입니다."
+	)
 	@GetMapping("/{searchKeyword}")
 	ResponseEntity<List<UserSearchResultDto>> searchResult(@PathVariable(name = "searchKeyword") String searchKeyword) {
 		

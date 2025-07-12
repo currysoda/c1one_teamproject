@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import uniqram.c1one.auth.dto.JwtToken;
@@ -27,6 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
@@ -37,6 +39,10 @@ public class AuthController {
     @PostMapping("/join")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest request) {
         authService.signup(request);
+        log.info("요청이 정상적으로 왔습니다.");
+        log.info("username = {}", request.getUsername());
+        log.info("Password = {}", request.getPassword());
+        log.info("ConfirmPassword = {}", request.getConfirmPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공");
     }
 
@@ -45,6 +51,10 @@ public class AuthController {
     public ResponseEntity<?> signin(@Valid @RequestBody SigninRequest request,
                                     HttpServletResponse response,
                                     HttpServletRequest httpRequest) {
+        log.info("/signin 요청이 정상적으로 전달됐습니다.");
+        log.info("username = {}", request.getUsername());
+        log.info("password = {}", request.getPassword());
+        
         try {
             JwtToken jwtToken = authService.signin(request);
 
@@ -74,6 +84,7 @@ public class AuthController {
             responseBody.put("message", "로그인 성공");
             responseBody.put("redirectUrl", "/index");
 
+            
             return ResponseEntity.ok(responseBody);
 
         } catch (Exception e) {
@@ -174,6 +185,7 @@ public class AuthController {
         } else {
             System.out.println(">>> accessTokenCookie가 null 입니다.");
         }
+        log.info("/logout 요청은 정상적으로 받았습니다.");
         return ResponseEntity.ok(new SimpleResponse("로그아웃 성공"));
     }
 

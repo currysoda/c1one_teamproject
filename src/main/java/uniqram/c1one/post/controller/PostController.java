@@ -1,7 +1,9 @@
 package uniqram.c1one.post.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -36,10 +39,12 @@ public class PostController {
 
     @GetMapping("/home/following")
     public ResponseEntity<List<HomePostResponse>> getFollowingRecentPosts(
-            @AuthenticationPrincipal CustomUserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            HttpServletRequest request
     ) {
         Long userId = userDetails.getUserId();
         List<HomePostResponse> homePosts = postService.getFollowingRecentPosts(userId);
+        log.info("/api/post/home/following 에서 GET 요청이 전송되었습니다. = {}", request.getMethod());
         return ResponseEntity.ok(homePosts);
     }
 
